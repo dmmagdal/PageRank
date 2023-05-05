@@ -1,0 +1,27 @@
+# Docker file to run a container that will run the 
+# pagerank_random_walk.py in Python 3.
+
+# Load tensorflow image for Python 3.
+FROM python:3.10.10-slim-bullseye
+
+# Set locale for variable (pulled from dockerfile in original OpenAI
+# GPT2 repository).
+ENV LANG=C.UTF-8
+
+# Create a directory in the docker container. Set the working directory
+# in the container to that newly created directory and then add all
+# files from the current directory in the host to the working directory
+# in the container.
+RUN mkdir /pagerank-randomwalk
+WORKDIR /pagerank-randomwalk
+ADD . /pagerank-randomwalk
+
+# Set up a volume so that the current directory in the host is
+# connected to the working directory in the container.
+
+# Install all required modules in the requirements.txt file.
+RUN python3 -m pip install --upgrade pip
+RUN pip3 install -r requirements.txt
+
+# Run the pagerank_random_walk.py program.
+CMD ["python3", "pagerank_random_walk.py"]
